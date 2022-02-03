@@ -8,9 +8,12 @@ function Expenses({ expenses }) {
   const [filteredYear, setFilteredYear] = useState("2020");
 
   const dropdownChangeHandler = (event) => {
-    console.log(event.target.value);
     setFilteredYear(event.target.value);
   };
+
+  const filteredExpenses = expenses.filter((expense) => {
+    return expense.date.getFullYear().toString() === filteredYear;
+  });
 
   return (
     <div>
@@ -19,15 +22,20 @@ function Expenses({ expenses }) {
           selected={filteredYear}
           filter={dropdownChangeHandler}
         />
-        {expenses.map((expense) => {
-          return (
-            <ExpenseItem
-              title={expense.title}
-              amount={expense.amount}
-              date={expense.date}
-            />
-          );
-        })}
+        {filteredExpenses.length === 0 ? (
+          <p>No expenses found</p>
+        ) : (
+          expenses.map((expense) => {
+            return (
+              <ExpenseItem
+                key={expense.id}
+                title={expense.title}
+                amount={expense.amount}
+                date={expense.date}
+              />
+            );
+          })
+        )}
       </Card>
     </div>
   );
